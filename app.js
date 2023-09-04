@@ -14,39 +14,36 @@ function Book(id, author, title, pages, haveRead) {
   return { id, author, title, pages, haveRead };
 }
 
-function showBooksInGrid() {
-  bookListContainer.innerHTML = '';
+function showBookInGrid(book) {
+  // bookListContainer.innerHTML = '';
+  const bookContainer = document.createElement('div');
 
-  bookList.forEach((book) => {
-    const bookContainer = document.createElement('div');
+  // TODO: Remake into <button>
+  const deleteBookBtn = document.createElement('img');
+  const title = document.createElement('h3');
+  const author = document.createElement('p');
+  const pages = document.createElement('p');
 
-    // TODO: Remake into <button>
-    const deleteBookBtn = document.createElement('img');
-    const title = document.createElement('h3');
-    const author = document.createElement('p');
-    const pages = document.createElement('p');
+  bookContainer.classList.add('book-container');
+  deleteBookBtn.classList.add('delete-book-btn');
+  title.classList.add('title');
+  author.classList.add('author');
+  pages.classList.add('pages');
 
-    bookContainer.classList.add('book-container');
-    deleteBookBtn.classList.add('delete-book-btn');
-    title.classList.add('title');
-    author.classList.add('author');
-    pages.classList.add('pages');
+  deleteBookBtn.src = 'delete.png';
 
-    deleteBookBtn.src = 'delete.png';
+  title.innerHTML = book.title;
+  author.innerHTML = 'Author: ' + book.author;
+  pages.innerHTML = 'Pages: ' + book.pages;
 
-    title.innerHTML = book.title;
-    author.innerHTML = 'Author: ' + book.author;
-    pages.innerHTML = 'Pages: ' + book.pages;
+  bookContainer.appendChild(deleteBookBtn);
+  bookContainer.appendChild(title);
+  bookContainer.appendChild(author);
+  bookContainer.appendChild(pages);
+  bookListContainer.appendChild(bookContainer);
 
-    bookContainer.appendChild(deleteBookBtn);
-    bookContainer.appendChild(title);
-    bookContainer.appendChild(author);
-    bookContainer.appendChild(pages);
-    bookListContainer.appendChild(bookContainer);
-
-    deleteBookBtn.addEventListener('click', () => {
-      deleteBook(book, bookContainer);
-    });
+  deleteBookBtn.addEventListener('click', () => {
+    deleteBook(book, bookContainer);
   });
 
   displayBookStats();
@@ -93,9 +90,11 @@ saveBookBtn.addEventListener('click', (e) => {
   const readRadio = document.querySelector('input[name="read-radio"]:checked').value;
   const haveRead = readRadio === 'true'; // Convert string to boolean
 
-  bookList.push(new Book(id, author, title, pages, haveRead));
+  const newBook = new Book(id, author, title, pages, haveRead);
 
-  showBooksInGrid();
+  bookList.push(newBook);
+
+  showBookInGrid(newBook);
 
   addBookForm.reset();
 });
@@ -103,6 +102,9 @@ saveBookBtn.addEventListener('click', (e) => {
 function deleteBook(book, bookContainer) {
   bookContainer.remove();
   bookList = bookList.filter((b) => book.id !== b.id);
+  displayBookStats();
 }
 
-showBooksInGrid();
+bookList.forEach((book) => {
+  showBookInGrid(book);
+});
