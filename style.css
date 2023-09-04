@@ -174,11 +174,13 @@ select {
 }
 
 .delete-book-btn {
+  border: none;
   bottom: 10px;
   cursor: pointer;
+  height: 2em;
   position: absolute;
   right: 10px;
-  width: 1.75em;
+  width: 2em;
 }
 
 .add-book-btn {

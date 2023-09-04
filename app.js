@@ -19,7 +19,7 @@ function showBookInGrid(book) {
   const bookContainer = document.createElement('div');
 
   // TODO: Remake into <button>
-  const deleteBookBtn = document.createElement('img');
+  const deleteBookBtn = document.createElement('button');
   const title = document.createElement('h3');
   const author = document.createElement('p');
   const pages = document.createElement('p');
@@ -30,7 +30,8 @@ function showBookInGrid(book) {
   author.classList.add('author');
   pages.classList.add('pages');
 
-  deleteBookBtn.src = 'delete.png';
+  deleteBookBtn.style.background = "url('delete.png') no-repeat center center";
+  deleteBookBtn.style.backgroundSize = 'contain';
 
   title.innerHTML = book.title;
   author.innerHTML = 'Author: ' + book.author;
