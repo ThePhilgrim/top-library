@@ -45,7 +45,7 @@ function showBooksInGrid() {
     bookListContainer.appendChild(bookContainer);
 
     deleteBookBtn.addEventListener('click', () => {
-      deleteBook(book);
+      deleteBook(book, bookContainer);
     });
   });
 
@@ -100,9 +100,9 @@ saveBookBtn.addEventListener('click', (e) => {
   addBookForm.reset();
 });
 
-function deleteBook(book) {
+function deleteBook(book, bookContainer) {
+  bookContainer.remove();
   bookList = bookList.filter((b) => book.id !== b.id);
-  showBooksInGrid();
 }
 
 showBooksInGrid();
