@@ -8,12 +8,10 @@ const addBookModal = document.querySelector('.add-book-modal');
 
 const addBookForm = document.querySelector('.book-form');
 
-const logBtn = document.getElementById('log');
+let bookList = [];
 
-const bookList = [];
-
-function Book(index, author, title, pages, haveRead) {
-  return { index, author, title, pages, haveRead };
+function Book(id, author, title, pages, haveRead) {
+  return { id, author, title, pages, haveRead };
 }
 
 function showBooksInGrid() {
@@ -21,6 +19,8 @@ function showBooksInGrid() {
 
   bookList.forEach((book) => {
     const bookContainer = document.createElement('div');
+
+    // TODO: Remake into <button>
     const deleteBookBtn = document.createElement('img');
     const title = document.createElement('h3');
     const author = document.createElement('p');
@@ -86,42 +86,23 @@ closeModalBtn.addEventListener('click', () => {
 
 saveBookBtn.addEventListener('click', (e) => {
   e.preventDefault();
-  const index = bookList.length;
+  const id = crypto.randomUUID();
   const author = document.getElementById('author').value;
   const title = document.getElementById('title').value;
   const pages = document.getElementById('pages').value;
   const readRadio = document.querySelector('input[name="read-radio"]:checked').value;
-  const haveRead = readRadio === 'true';
+  const haveRead = readRadio === 'true'; // Convert string to boolean
 
-  bookList.push(new Book(index, author, title, pages, haveRead));
+  bookList.push(new Book(id, author, title, pages, haveRead));
 
   showBooksInGrid();
 
   addBookForm.reset();
 });
 
-function reIndexBooks(startingIndex) {
-  const booksToReIndex = bookList.length - startingIndex;
-
-  if (booksToReIndex === 1) {
-    bookList[bookList.length - 1].index -= 1;
-  } else {
-    for (let i = startingIndex; i < booksToReIndex; i++) {
-      const currentIndex = bookList[i].index;
-
-      bookList[i].index = currentIndex - 1;
-    }
-  }
-
-  showBooksInGrid();
-}
-
 function deleteBook(book) {
-  const index = book.index;
-
-  bookList.splice(index, 1);
-
-  reIndexBooks(index);
+  bookList = bookList.filter((b) => book.id !== b.id);
+  showBooksInGrid();
 }
 
 showBooksInGrid();
