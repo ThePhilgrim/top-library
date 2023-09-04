@@ -23,12 +23,14 @@ function showBookInGrid(book) {
   const title = document.createElement('h3');
   const author = document.createElement('p');
   const pages = document.createElement('p');
+  const haveReadQuestion = document.createElement('p');
 
   bookContainer.classList.add('book-container');
   deleteBookBtn.classList.add('delete-book-btn');
   title.classList.add('title');
   author.classList.add('author');
   pages.classList.add('pages');
+  haveReadQuestion.classList.add('have-read-question');
 
   deleteBookBtn.style.background = "url('delete.png') no-repeat center center";
   deleteBookBtn.style.backgroundSize = 'contain';
@@ -36,17 +38,48 @@ function showBookInGrid(book) {
   title.innerHTML = book.title;
   author.innerHTML = 'Author: ' + book.author;
   pages.innerHTML = 'Pages: ' + book.pages;
+  haveReadQuestion.innerHTML = 'Have you read the book?';
+
+  /* Read status Toggle */
+  const toggleContainer = document.createElement('div');
+  toggleContainer.classList.add('toggle-container');
+  const haveReadToggle = document.createElement('input');
+  haveReadToggle.classList.add('checkbox');
+  haveReadToggle.type = 'checkbox';
+  const knobs = document.createElement('div');
+  knobs.classList.add('knobs');
+  const layer = document.createElement('div');
+  layer.classList.add('layer');
+
+  if (book.haveRead) {
+    haveReadToggle.checked = true;
+  }
+
+  toggleContainer.appendChild(haveReadToggle);
+  toggleContainer.appendChild(knobs);
+  toggleContainer.appendChild(layer);
 
   bookContainer.appendChild(deleteBookBtn);
   bookContainer.appendChild(title);
   bookContainer.appendChild(author);
   bookContainer.appendChild(pages);
+  bookContainer.appendChild(haveReadQuestion);
+  bookContainer.appendChild(toggleContainer);
   bookListContainer.appendChild(bookContainer);
+
+  haveReadToggle.addEventListener('change', () => {
+    changeReadStatus(book, haveReadToggle);
+  });
 
   deleteBookBtn.addEventListener('click', () => {
     deleteBook(book, bookContainer);
   });
 
+  displayBookStats();
+}
+
+function changeReadStatus(book, haveReadToggle) {
+  book.haveRead = haveReadToggle.checked;
   displayBookStats();
 }
 
