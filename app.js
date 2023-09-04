@@ -11,14 +11,15 @@ const addBookForm = document.querySelector('.book-form');
 let bookList = [];
 
 function Book(id, author, title, pages, haveRead) {
-  return { id, author, title, pages, haveRead };
+  this.id = id;
+  this.author = author;
+  this.title = title;
+  this.pages = pages;
+  this.haveRead = haveRead;
 }
 
-function showBookInGrid(book) {
-  // bookListContainer.innerHTML = '';
+Book.prototype.showBookInGrid = function () {
   const bookContainer = document.createElement('div');
-
-  // TODO: Remake into <button>
   const deleteBookBtn = document.createElement('button');
   const title = document.createElement('h3');
   const author = document.createElement('p');
@@ -35,9 +36,9 @@ function showBookInGrid(book) {
   deleteBookBtn.style.background = "url('delete.png') no-repeat center center";
   deleteBookBtn.style.backgroundSize = 'contain';
 
-  title.innerHTML = book.title;
-  author.innerHTML = 'Author: ' + book.author;
-  pages.innerHTML = 'Pages: ' + book.pages;
+  title.innerHTML = this.title;
+  author.innerHTML = 'Author: ' + this.author;
+  pages.innerHTML = 'Pages: ' + this.pages;
   haveReadQuestion.innerHTML = 'Have you read the book?';
 
   /* Read status Toggle */
@@ -51,7 +52,7 @@ function showBookInGrid(book) {
   const layer = document.createElement('div');
   layer.classList.add('layer');
 
-  if (book.haveRead) {
+  if (this.haveRead) {
     haveReadToggle.checked = true;
   }
 
@@ -68,20 +69,20 @@ function showBookInGrid(book) {
   bookListContainer.appendChild(bookContainer);
 
   haveReadToggle.addEventListener('change', () => {
-    changeReadStatus(book, haveReadToggle);
+    this.changeReadStatus(haveReadToggle);
   });
 
   deleteBookBtn.addEventListener('click', () => {
-    deleteBook(book, bookContainer);
+    this.deleteBook(bookContainer);
   });
 
   displayBookStats();
-}
+};
 
-function changeReadStatus(book, haveReadToggle) {
-  book.haveRead = haveReadToggle.checked;
+Book.prototype.changeReadStatus = function (haveReadToggle) {
+  this.haveRead = haveReadToggle.checked;
   displayBookStats();
-}
+};
 
 function displayBookStats() {
   const statsValueContainer = document.querySelector('.stats-values');
@@ -128,17 +129,17 @@ saveBookBtn.addEventListener('click', (e) => {
 
   bookList.push(newBook);
 
-  showBookInGrid(newBook);
+  newBook.showBookInGrid();
 
   addBookForm.reset();
 });
 
-function deleteBook(book, bookContainer) {
+Book.prototype.deleteBook = function (bookContainer) {
   bookContainer.remove();
-  bookList = bookList.filter((b) => book.id !== b.id);
+  bookList = bookList.filter((b) => this.id !== b.id);
   displayBookStats();
-}
+};
 
 bookList.forEach((book) => {
-  showBookInGrid(book);
+  this.showBookInGrid();
 });
