@@ -10,79 +10,87 @@ const addBookForm = document.querySelector('.book-form');
 
 let bookList = [];
 
-function Book(id, author, title, pages, haveRead) {
-  this.id = id;
-  this.author = author;
-  this.title = title;
-  this.pages = pages;
-  this.haveRead = haveRead;
-}
-
-Book.prototype.showBookInGrid = function () {
-  const bookContainer = document.createElement('div');
-  const deleteBookBtn = document.createElement('button');
-  const title = document.createElement('h3');
-  const author = document.createElement('p');
-  const pages = document.createElement('p');
-  const haveReadQuestion = document.createElement('p');
-
-  bookContainer.classList.add('book-container');
-  deleteBookBtn.classList.add('delete-book-btn');
-  title.classList.add('title');
-  author.classList.add('author');
-  pages.classList.add('pages');
-  haveReadQuestion.classList.add('have-read-question');
-
-  deleteBookBtn.style.background = "url('delete.png') no-repeat center center";
-  deleteBookBtn.style.backgroundSize = 'contain';
-
-  title.innerHTML = this.title;
-  author.innerHTML = 'Author: ' + this.author;
-  pages.innerHTML = 'Pages: ' + this.pages;
-  haveReadQuestion.innerHTML = 'Have you read the book?';
-
-  /* Read status Toggle */
-  const toggleContainer = document.createElement('div');
-  toggleContainer.classList.add('toggle-container');
-  const haveReadToggle = document.createElement('input');
-  haveReadToggle.classList.add('checkbox');
-  haveReadToggle.type = 'checkbox';
-  const knobs = document.createElement('div');
-  knobs.classList.add('knobs');
-  const layer = document.createElement('div');
-  layer.classList.add('layer');
-
-  if (this.haveRead) {
-    haveReadToggle.checked = true;
+class Book {
+  constructor(id, author, title, pages, haveRead) {
+    this.id = id;
+    this.author = author;
+    this.title = title;
+    this.pages = pages;
+    this.haveRead = haveRead;
   }
 
-  toggleContainer.appendChild(haveReadToggle);
-  toggleContainer.appendChild(knobs);
-  toggleContainer.appendChild(layer);
+  showBookInGrid() {
+    const bookContainer = document.createElement('div');
+    const deleteBookBtn = document.createElement('button');
+    const title = document.createElement('h3');
+    const author = document.createElement('p');
+    const pages = document.createElement('p');
+    const haveReadQuestion = document.createElement('p');
 
-  bookContainer.appendChild(deleteBookBtn);
-  bookContainer.appendChild(title);
-  bookContainer.appendChild(author);
-  bookContainer.appendChild(pages);
-  bookContainer.appendChild(haveReadQuestion);
-  bookContainer.appendChild(toggleContainer);
-  bookListContainer.appendChild(bookContainer);
+    bookContainer.classList.add('book-container');
+    deleteBookBtn.classList.add('delete-book-btn');
+    title.classList.add('title');
+    author.classList.add('author');
+    pages.classList.add('pages');
+    haveReadQuestion.classList.add('have-read-question');
 
-  haveReadToggle.addEventListener('change', () => {
-    this.changeReadStatus(haveReadToggle);
-  });
+    deleteBookBtn.style.background = "url('delete.png') no-repeat center center";
+    deleteBookBtn.style.backgroundSize = 'contain';
 
-  deleteBookBtn.addEventListener('click', () => {
-    this.deleteBook(bookContainer);
-  });
+    title.innerHTML = this.title;
+    author.innerHTML = 'Author: ' + this.author;
+    pages.innerHTML = 'Pages: ' + this.pages;
+    haveReadQuestion.innerHTML = 'Have you read the book?';
 
-  displayBookStats();
-};
+    /* Read status Toggle */
+    const toggleContainer = document.createElement('div');
+    toggleContainer.classList.add('toggle-container');
+    const haveReadToggle = document.createElement('input');
+    haveReadToggle.classList.add('checkbox');
+    haveReadToggle.type = 'checkbox';
+    const knobs = document.createElement('div');
+    knobs.classList.add('knobs');
+    const layer = document.createElement('div');
+    layer.classList.add('layer');
 
-Book.prototype.changeReadStatus = function (haveReadToggle) {
-  this.haveRead = haveReadToggle.checked;
-  displayBookStats();
-};
+    if (this.haveRead) {
+      haveReadToggle.checked = true;
+    }
+
+    toggleContainer.appendChild(haveReadToggle);
+    toggleContainer.appendChild(knobs);
+    toggleContainer.appendChild(layer);
+
+    bookContainer.appendChild(deleteBookBtn);
+    bookContainer.appendChild(title);
+    bookContainer.appendChild(author);
+    bookContainer.appendChild(pages);
+    bookContainer.appendChild(haveReadQuestion);
+    bookContainer.appendChild(toggleContainer);
+    bookListContainer.appendChild(bookContainer);
+
+    haveReadToggle.addEventListener('change', () => {
+      this.changeReadStatus(haveReadToggle);
+    });
+
+    deleteBookBtn.addEventListener('click', () => {
+      this.deleteBook(bookContainer);
+    });
+
+    displayBookStats();
+  }
+
+  changeReadStatus(haveReadToggle) {
+    this.haveRead = haveReadToggle.checked;
+    displayBookStats();
+  }
+
+  deleteBook(bookContainer) {
+    bookContainer.remove();
+    bookList = bookList.filter((b) => this.id !== b.id);
+    displayBookStats();
+  }
+}
 
 function displayBookStats() {
   const statsValueContainer = document.querySelector('.stats-values');
@@ -133,12 +141,6 @@ saveBookBtn.addEventListener('click', (e) => {
 
   addBookForm.reset();
 });
-
-Book.prototype.deleteBook = function (bookContainer) {
-  bookContainer.remove();
-  bookList = bookList.filter((b) => this.id !== b.id);
-  displayBookStats();
-};
 
 bookList.forEach((book) => {
   this.showBookInGrid();
